@@ -34,10 +34,11 @@ button.colorOption:hover {
 }
 
 #newGameButton {
-  background-color: gray;
+  background-color: #98FF98;
   margin-top: 10px;
   padding: 5px;
   font-size: 10px;
+  border: 2px solid black;
   cursor: pointer;
   
 }
