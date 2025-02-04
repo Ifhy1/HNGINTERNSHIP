@@ -6,8 +6,16 @@ const newGameButton = document.getElementById('newGameButton');
 
 let score = 0;
 let targetColor;
-let successfulTrials = 0; // Counter for successful trials
-let wrongAttempts = 0; // Counter for wrong attempts
+let totalTrials = 0; 
+const maxTrials = 10; 
+let wrongAttempts = 0; 
+
+const congratulatoryMessages = [
+  " Great job! You're amazing at this! 🎉",
+  " Correct! You nailed it! ",
+  " Awesome work! Keep it up! 🎊",
+  " Spot on! You're a color master! ✨"
+];
 
 function generateRandomColor() {
     const r = Math.floor(Math.random() * 256);
@@ -17,15 +25,21 @@ function generateRandomColor() {
 }
 
 function startNewGame() {
-    score = 0; // Reset score on new game
-    successfulTrials = 0; // Reset successful trials count
-    wrongAttempts = 0; // Reset wrong attempts count
+    score = 0; 
+    totalTrials = 0; 
+    wrongAttempts = 0; 
     scoreDisplay.textContent = score;
     gameStatus.textContent = '';
     setupGame();
 }
 
 function setupGame() {
+    if (totalTrials >= maxTrials) {
+        gameStatus.textContent = `Game Over! You completed ${totalTrials} trials with a score of ${score}.`;
+        optionsContainer.innerHTML = ''; 
+        return; 
+    }
+
     gameStatus.textContent = '';
     optionsContainer.innerHTML = '';
     targetColor = generateRandomColor();
@@ -49,31 +63,35 @@ function setupGame() {
 function handleColorClick(event) {
     const selectedColor = event.target.dataset.color;
 
+    totalTrials++;
     if (selectedColor === targetColor) {
         score++;
-        successfulTrials++;
         scoreDisplay.textContent = score;
 
-        if (successfulTrials >= 5) {
-            gameStatus.textContent = 'Game Over! You won after 5 successful trials!';
-            return; // Stop the game after 5 successful trials
-        }
+        const message = congratulatoryMessages[Math.floor(Math.random() * congratulatoryMessages.length)];
+        gameStatus.textContent = message;
 
-        setupGame(); // Immediately reset the game after a correct answer
+        setTimeout(setupGame, 1500);
     } else {
         wrongAttempts++;
         if (wrongAttempts === 1) {
             gameStatus.textContent = 'Oooops, not quite. Try again!';
         } else if (wrongAttempts === 2) {
-            gameStatus.textContent = 'Still not it! Give it another shot!';
+            gameStatus.textContent = 'Still not it! Keep trying!';
         } else {
-            gameStatus.textContent = 'Oops! One more try!';
+            gameStatus.textContent = 'Nope, that wasn’t it. One more go!';
         }
+    }
+
+    if (totalTrials >= maxTrials) {
+        setTimeout(() => {
+            gameStatus.textContent = `Game Over! You completed ${maxTrials} trials with a score of ${score}.`;
+            optionsContainer.innerHTML = ''; 
+        }, 1500); 
     }
 }
 
-// Event listener for new game button
 newGameButton.addEventListener('click', startNewGame);
 
-// Start the first game
 startNewGame();
+
