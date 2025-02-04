@@ -1,0 +1,43 @@
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+  background-color: pink;
+  margin: 0;
+  padding: 20px;
+}
+.circle {
+  width: 150px;
+  height: 150px;
+  background-color: #000;
+  border-radius: 50%;
+  margin: 20px auto;
+}
+
+#options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button.colorOption {
+  width: 100px;
+  height: 100px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+button.colorOption:hover {
+  transform: scale(1.1);
+}
+
+#newGameButton {
+  background-color: yellow;
+  margin-top: 10px;
+  padding: 10px ;
+  font-size: 10px;
+  cursor: pointer;
+  
+}
