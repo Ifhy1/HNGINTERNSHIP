@@ -6,6 +6,8 @@ const newGameButton = document.getElementById('newGameButton');
 
 let score = 0;
 let targetColor;
+let successfulTrials = 0; // Counter for successful trials
+let wrongAttempts = 0; // Counter for wrong attempts
 
 function generateRandomColor() {
     const r = Math.floor(Math.random() * 256);
@@ -15,6 +17,15 @@ function generateRandomColor() {
 }
 
 function startNewGame() {
+    score = 0; // Reset score on new game
+    successfulTrials = 0; // Reset successful trials count
+    wrongAttempts = 0; // Reset wrong attempts count
+    scoreDisplay.textContent = score;
+    gameStatus.textContent = '';
+    setupGame();
+}
+
+function setupGame() {
     gameStatus.textContent = '';
     optionsContainer.innerHTML = '';
     targetColor = generateRandomColor();
@@ -39,14 +50,30 @@ function handleColorClick(event) {
     const selectedColor = event.target.dataset.color;
 
     if (selectedColor === targetColor) {
-      gameStatus.textContent ='Spot on! You guessed right.';
-        score++; 
-    } else {
-        gameStatus.textContent = 'Oooops, not quite. Give it another shot!';
-    }
+        score++;
+        successfulTrials++;
+        scoreDisplay.textContent = score;
 
-    scoreDisplay.textContent = score;
+        if (successfulTrials >= 5) {
+            gameStatus.textContent = 'Game Over! You won after 5 successful trials!';
+            return; // Stop the game after 5 successful trials
+        }
+
+        setupGame(); // Immediately reset the game after a correct answer
+    } else {
+        wrongAttempts++;
+        if (wrongAttempts === 1) {
+            gameStatus.textContent = 'Oooops, not quite. Try again!';
+        } else if (wrongAttempts === 2) {
+            gameStatus.textContent = 'Still not it! Give it another shot!';
+        } else {
+            gameStatus.textContent = 'Oops! One more try!';
+        }
+    }
 }
 
+// Event listener for new game button
 newGameButton.addEventListener('click', startNewGame);
+
+// Start the first game
 startNewGame();
